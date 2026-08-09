@@ -218,7 +218,7 @@ class ApplicationStore:
         try:
             yield connection
             connection.commit()
-        except BaseException:
+        except Exception:
             connection.rollback()
             raise
         finally:
