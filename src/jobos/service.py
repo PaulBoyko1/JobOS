@@ -96,7 +96,9 @@ class JobOS:
 
     def dashboard(self, *, today: date) -> Dashboard:
         applications = self.store.list()
-        active = tuple(application for application in applications if application.stage not in TERMINAL_STAGES)
+        active = tuple(
+            application for application in applications if application.stage not in TERMINAL_STAGES
+        )
         overdue = tuple(
             application
             for application in active
@@ -107,8 +109,12 @@ class JobOS:
             for application in active
             if application.next_action_due is not None and application.next_action_due == today
         )
-        offers = tuple(application for application in active if application.stage is Stage.OFFER)
-        next_actions = tuple(application for application in active if application.next_action is not None)
+        offers = tuple(
+            application for application in active if application.stage is Stage.OFFER
+        )
+        next_actions = tuple(
+            application for application in active if application.next_action is not None
+        )
         return Dashboard(
             active_count=len(active),
             overdue=overdue,
