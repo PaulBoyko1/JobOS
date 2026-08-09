@@ -7,7 +7,7 @@ import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 from jobos.domain import Application, Stage
@@ -89,7 +89,16 @@ class ApplicationStore:
                     company, role, source, stage, priority, notes, created_at, updated_at
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (company, role, source, Stage.SAVED.value, priority, notes, now.isoformat(), now.isoformat()),
+                (
+                    company,
+                    role,
+                    source,
+                    Stage.SAVED.value,
+                    priority,
+                    notes,
+                    now.isoformat(),
+                    now.isoformat(),
+                ),
             )
             if cursor.lastrowid is None:
                 raise RuntimeError("database did not return the new application ID")
@@ -119,7 +128,9 @@ class ApplicationStore:
         if stage is not None:
             query += " WHERE stage = ?"
             params = (stage.value,)
-        query += " ORDER BY next_action_due IS NULL, next_action_due, priority DESC, updated_at DESC"
+        query += (
+            " ORDER BY next_action_due IS NULL, next_action_due, priority DESC, updated_at DESC"
+        )
         with self._connection() as connection:
             rows = connection.execute(query, params).fetchall()
         return [_application_from_row(row) for row in rows]
@@ -176,7 +187,9 @@ class ApplicationStore:
         with self._connection() as connection:
             current = self._get_required(connection, application_id)
             if current.version != expected_version:
-                raise ConcurrencyError("application changed; refresh it before planning the next action")
+                raise ConcurrencyError(
+                    "application changed; refresh it before planning the next action"
+                )
             cursor = connection.execute(
                 """
                 UPDATE applications
@@ -306,4 +319,4 @@ def _date_from_storage(value: object) -> date | None:
 
 
 def _utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
