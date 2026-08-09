@@ -7,7 +7,7 @@ import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
-from datetime import date, datetime, UTC
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 from jobos.domain import Application, Stage
