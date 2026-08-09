@@ -92,10 +92,10 @@ class JobOS:
         )
 
     def applications(self, *, stage: Stage | None = None) -> list[Application]:
-        return self.store.list(stage=stage)
+        return self.store.list_applications(stage=stage)
 
     def dashboard(self, *, today: date) -> Dashboard:
-        applications = self.store.list()
+        applications = self.store.list_applications()
         active = tuple(
             application for application in applications if application.stage not in TERMINAL_STAGES
         )
