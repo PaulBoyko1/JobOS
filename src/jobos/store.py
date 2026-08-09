@@ -12,7 +12,6 @@ from pathlib import Path
 
 from jobos.domain import Application, Stage
 
-
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS applications (
     id INTEGER PRIMARY KEY,
