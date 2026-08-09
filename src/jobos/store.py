@@ -7,7 +7,7 @@ import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
-from datetime import UTC, date, datetime
+from datetime import date, datetime, UTC
 from pathlib import Path
 
 from jobos.domain import Application, Stage
@@ -199,7 +199,9 @@ class ApplicationStore:
                 (action, _date_to_storage(due), now.isoformat(), application_id, expected_version),
             )
             if cursor.rowcount != 1:
-                raise ConcurrencyError("application changed; refresh it before planning the next action")
+                raise ConcurrencyError(
+                    "application changed; refresh it before planning the next action"
+                )
             self._append_event(
                 connection,
                 application_id=application_id,
