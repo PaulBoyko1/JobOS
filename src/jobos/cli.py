@@ -7,7 +7,7 @@ import json
 from datetime import date
 from pathlib import Path
 
-from jobos.domain import Application, Stage, parse_stage
+from jobos.domain import Application, parse_stage
 from jobos.service import Dashboard, JobOS
 from jobos.store import ApplicationStore
 
@@ -121,7 +121,9 @@ def _print_application(application: Application) -> None:
                 "role": application.role,
                 "stage": application.stage.value,
                 "priority": application.priority,
-                "applied_on": application.applied_on.isoformat() if application.applied_on else None,
+                "applied_on": (
+                    application.applied_on.isoformat() if application.applied_on else None
+                ),
                 "next_action": application.next_action,
                 "next_action_due": (
                     application.next_action_due.isoformat() if application.next_action_due else None
@@ -151,5 +153,7 @@ def _dashboard_item(application: Application) -> dict[str, str | int | None]:
         "role": application.role,
         "stage": application.stage.value,
         "next_action": application.next_action,
-        "next_action_due": application.next_action_due.isoformat() if application.next_action_due else None,
+        "next_action_due": (
+            application.next_action_due.isoformat() if application.next_action_due else None
+        ),
     }
