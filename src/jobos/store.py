@@ -121,7 +121,7 @@ class ApplicationStore:
             ).fetchone()
         return _application_from_row(row) if row is not None else None
 
-    def list(self, *, stage: Stage | None = None) -> list[Application]:
+    def list_applications(self, *, stage: Stage | None = None) -> list[Application]:
         query = "SELECT * FROM applications"
         params: tuple[str, ...] = ()
         if stage is not None:
